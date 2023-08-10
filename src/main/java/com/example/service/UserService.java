@@ -43,10 +43,13 @@ public class UserService {
 	 */
 	@Transactional(readOnly = false)
 	public User save(User entity) {
-		/**
-		 * パスワードをjavaの暗号化方式を付与する
-		 */
-		entity.setPassword("{noop}" + entity.getPassword());
+		// パスワードエンコーダーを取得
+		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		// パスワードをハッシュ化してエンコード接頭子をつける
+		String encodedPassword = passwordEncoder.encode(entity.getPassword());
+		// エンコードされたパスワードをエンティティにセット
+		entity.setPassword(encodedPassword);
+		// エンティティを保存
 		return userRepository.save(entity);
 	}
 
