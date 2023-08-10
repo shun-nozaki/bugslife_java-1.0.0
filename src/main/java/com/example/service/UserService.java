@@ -3,6 +3,8 @@ package com.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.form.UserSearchForm;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+import jakarta.persistence.Query;
 
 @Service
 @Transactional(readOnly = true)
@@ -76,13 +79,17 @@ public class UserService {
 	@SuppressWarnings("unchecked")
 	public List<User> search(UserSearchForm form, boolean isAdmin) {
 		String role = isAdmin ? "ADMIN" : "USER";
-		if (form.getName() != null && form.getName() != "") {
-			String sql = "SELECT * FROM users WHERE name = '" + form.getName() + "'";
+		if (form.getName() != null && !form.getName().isEmpty()) {
+			String sql = "SELECT * FROM users WHERE name = :name";
 			if (!isAdmin) {
-				sql += " AND role = '" + role + "'";
+				sql += " AND role = :role";
 			}
-			return entityManager.createNativeQuery(sql, User.class)
-					.getResultList();
+			Query query = entityManager.createNativeQuery(sql, User.class);
+			query.setParameter("name", form.getName());
+			if (!isAdmin) {
+				query.setParameter("role", role);
+			}
+			return query.getResultList();
 		}
 		if (!isAdmin) {
 			return userRepository.findByRole(role);
