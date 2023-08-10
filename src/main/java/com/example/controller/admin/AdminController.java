@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AdminController {
 
 	@GetMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public String index(Model model, Authentication authentication) {
 		return "admin/index";
 	}
@@ -32,6 +34,7 @@ public class AdminController {
 	 * @return
 	 */
 	@PostMapping("/download")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String download(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try (OutputStream os = response.getOutputStream();) {
 			Path filePath = new ClassPathResource("static/image/confidential_file.png").getFile().toPath();
