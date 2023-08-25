@@ -58,6 +58,7 @@
         />
         <!-- 画像があれば縮小して表示 -->
         <img
+          id="image_preview"
           th:if="${app.image != null && app.image != ''}"
           th:src="*{image}"
           th:alt="現在の画像"
@@ -94,23 +95,23 @@
     <script>
       window.addEventListener('load', function () {
         const imageFile = document.getElementById('image_file');
+        const imagePreview = document.getElementById('image_preview');
         const image = document.getElementById('image');
+        
         imageFile.addEventListener('change', function () {
           const file = imageFile.files[0];
+          const objectURL = URL.createObjectURL(file);
+          imagePreview.src = objectURL;
+          imagePreview.style = "max-width: 200px; max-height: 200px;"
+
           const reader = new FileReader();
           reader.addEventListener('load', function () {
             image.value = reader.result;
-            const imagePreview = document.createElement('img');
-            imagePreview.id = 'image_preview';
-            imagePreview.src = reader.result;
-            imagePreview.style = "max-width: 200px; max-height: 200px;"
-
-            imageFile.after(imagePreview);
           });
           reader.readAsDataURL(file);
         });
       });
-    </script>
+    </script>    
     <link th:href="@{/css/app.css}" type="text/css" rel="stylesheet" />
   </th:block>
 </html>
