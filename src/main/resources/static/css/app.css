@@ -24,20 +24,6 @@ a.btn {
   cursor: default;
 }
 
-a.btn-warning {
-  background-color: rgb(0, 81, 255);
-  color: white;
-}
-
-a.btn-light {
-  background-color: gray;
-  color: white;
-}
-.btn-info {
-  background-color: rgba(255, 0, 0, 0.818);
-  color: white;
-}
-
 a.btn-link {
   font-weight: 700;
   height: 36px;
