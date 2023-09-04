@@ -95,23 +95,30 @@
     <script>
       window.addEventListener('load', function () {
         const imageFile = document.getElementById('image_file');
-        const imagePreview = document.getElementById('image_preview');
         const image = document.getElementById('image');
-        
+
         imageFile.addEventListener('change', function () {
           const file = imageFile.files[0];
-          const objectURL = URL.createObjectURL(file);
-          imagePreview.src = objectURL;
-          imagePreview.style = "max-width: 200px; max-height: 200px;"
-
           const reader = new FileReader();
+          const objectURL = URL.createObjectURL(file);
           reader.addEventListener('load', function () {
             image.value = reader.result;
+            const existingImagePreview = document.getElementById('image_preview');
+
+            if (existingImagePreview) {
+              existingImagePreview.src = objectURL;
+            } else {
+              const imagePreview = document.createElement('img');
+              imagePreview.src = objectURL;
+              imagePreview.style = "max-width: 200px; max-height: 200px;"
+
+              imageFile.after(imagePreview);
+            }
           });
           reader.readAsDataURL(file);
         });
       });
-    </script>    
+    </script>
     <link th:href="@{/css/app.css}" type="text/css" rel="stylesheet" />
   </th:block>
 </html>
