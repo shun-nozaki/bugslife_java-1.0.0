@@ -32,13 +32,10 @@ public class ShopController {
 
 	@GetMapping
 	public String index(Model model, @RequestParam(name = "name", required = false) Optional<String> name) {
-		Shop probe = new Shop();
-		if (name.isPresent()) {
-			probe.setName(name.get());
-		}
-		List<Shop> shops = shopService.findAll(probe);
+		String searchName = name.orElse("");
+		List<Shop> shops = shopService.findShopsByName(searchName);
 		model.addAttribute("listShop", shops);
-		model.addAttribute("name", name.isPresent() ? name.get() : null);
+		model.addAttribute("name", searchName);
 		return "shop/index";
 	}
 

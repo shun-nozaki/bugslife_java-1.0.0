@@ -38,4 +38,7 @@ public class ShopService {
 		shopRepository.delete(entity);
 	}
 
+	public List<Shop> findShopsByName(String name) {
+		return shopRepository.findShopsByName(name);
+	}
 }
