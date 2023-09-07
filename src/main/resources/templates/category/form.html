@@ -24,6 +24,8 @@
           type="text"
           class="form-control"
           th:field="*{code}"
+          pattern="[A-Z]{3}-\d{3}"
+          required
         />
       </div>
       <div class="form-group">
@@ -34,6 +36,8 @@
           type="text"
           class="form-control"
           th:field="*{name}"
+          maxlength="20"
+          required
         />
       </div>
       <div class="form-group">
@@ -49,7 +53,11 @@
       <div class="form-group">
         <label>説明</label>
         <textarea
+          id="description"
+          name="description"
           class="form-control"
+          maxlength="300"
+          required
         ></textarea>
       </div>
 
