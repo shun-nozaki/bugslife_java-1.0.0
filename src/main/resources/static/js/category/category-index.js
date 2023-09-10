@@ -7,11 +7,4 @@ $(document).ready(function () {
       trigger: "click",
     });
   });
-
-  $('svg[data-bs-toggle="tooltip"]').click(function () {
-    // リンクのhref属性を取得
-    var href = $(this).closest('.btn').find('a').attr('href');
-    // ページを指定のリンクに移動
-    window.location.href = href;
-  });
 });
