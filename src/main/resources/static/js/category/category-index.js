@@ -5,6 +5,7 @@ $(document).ready(function () {
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl, {
       trigger: "click",
+      placement: "bottom",
     });
   });
 });
