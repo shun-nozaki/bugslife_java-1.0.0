@@ -16,7 +16,7 @@ $(document).ready(function () {
     })
     .fail(function () {
       // APIコールが失敗した場合の処理
-      console.log("APIコールが失敗しました。");
+      console.error("APIコールが失敗しました。");
     });
 
   $("#update-button").click(function () {
@@ -42,13 +42,13 @@ $(document).ready(function () {
       type: "POST",
       dataType: "text",
       contentType: "application/json",
-      data: postData,
+      data: JSON.stringify(postData),
     }).done(function (data) {
       $("#success-message").text(data).show().fadeOut(3000);
     });
   });
 
-  validation = function (checkedIds) {
+  function validation(checkedIds) {
     if (checkedIds.length == 0) {
       $("#error-message")
         .text(
