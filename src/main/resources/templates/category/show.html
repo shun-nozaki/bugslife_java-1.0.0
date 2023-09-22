@@ -22,7 +22,7 @@
     <div class="form-group">
       <label for="products">紐付商品一覧: </label>
       <span th:each="categoryProduct : ${category.categoryProducts}">
-        <span class="badge bg-info text-dark" th:text="${categoryProduct.product.name}" />
+        <span class="badge bg-info text-dark" th:text="${categoryProduct.product.name}">
       </span>
     </div>
 

@@ -18,6 +18,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Expression;
 
 import com.example.entity.ProductWithCategoryName;
 import com.example.form.ProductForm;
@@ -67,7 +68,11 @@ public class ProductService {
 
 		Join<Product, CategoryProduct> categoryProductJoin = root.joinList("categoryProducts", JoinType.LEFT);
 		Join<CategoryProduct, Category> categoryJoin = categoryProductJoin.join("category", JoinType.LEFT);
-
+		// 商品IDでグループ化して、カテゴリー名を結合
+		Expression<String> concatenatedCategories = builder.function(
+			"GROUP_CONCAT", String.class,
+			categoryJoin.get("name")
+		);	
 		query.multiselect(
 			root.get("id"),
 			root.get("code"),
@@ -75,7 +80,7 @@ public class ProductService {
 			root.get("weight"),
 			root.get("height"),
 			root.get("price"),
-			categoryJoin.get("name").alias("categoryName")
+			concatenatedCategories.alias("categoryName")
 		).where(builder.equal(root.get("shopId"), shopId));
 
 		Predicate finalPredicate = builder.equal(root.get("shopId"), shopId);
@@ -122,7 +127,7 @@ public class ProductService {
 			finalPredicate = builder.and(finalPredicate, builder.lessThanOrEqualTo(root.get("price"), form.getPrice2()));
 		}
 		query.where(finalPredicate);
-
+		query.groupBy(root.get("id"));
 		return entityManager.createQuery(query).getResultList();
 	}
 
